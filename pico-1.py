@@ -14,6 +14,11 @@ while True:
     print("Temperature:", temp, "°C")
 
     # If temperature > 15 → LED ON, else OFF
-    # INSERT THE CONDITIONAL STATEMENT HERE 
+    if temp > 15:
+        led.value(1)  # Turn LED ON
+        print("LED ON (Temp > 15)")
+    else:
+        led.value(0)  # Turn LED OFF
+        print("LED OFF (Temp <= 15)")
 
     sleep(1)  # Wait 1 second before next reading
