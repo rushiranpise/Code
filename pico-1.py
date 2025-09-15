@@ -5,20 +5,20 @@ import urandom  # MicroPython random module
 sleep(0.01)  # Wait for USB to connect
 print("Hello, Pi Pico!")
 
-# Setup LED on GPIO5
-led = Pin(5, Pin.OUT)
+# Setup Green LED on GPIO6 (change if needed)
+green_led = Pin(6, Pin.OUT)
 
 while True:
-    # Generate random temperature between 10 and 20
-    temp = 10 + urandom.getrandbits(4) % 11  # 10–20 inclusive
-    print("Temperature:", temp, "°C")
+    # Generate random pressure between 40 and 50 psi
+    pressure = 40 + urandom.getrandbits(4) % 11  # 40–50 inclusive
+    print("Pressure:", pressure, "psi")
 
-    # If temperature > 15 → LED ON, else OFF
-    if temp > 15:
-        led.value(1)  # Turn LED ON
-        print("LED ON (Temp > 15)")
+    # Conditional statement for green LED
+    if pressure > 45:
+        green_led.value(1)  # Turn Green LED ON
+        print("Green LED ON (Pressure > 45 psi)")
     else:
-        led.value(0)  # Turn LED OFF
-        print("LED OFF (Temp <= 15)")
+        green_led.value(0)  # Turn Green LED OFF
+        print("Green LED OFF (Pressure <= 45 psi)")
 
     sleep(1)  # Wait 1 second before next reading
