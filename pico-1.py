@@ -1,24 +1,34 @@
 from machine import Pin
 from utime import sleep
-import urandom  # MicroPython random module
+import dht
 
 sleep(0.01)  # Wait for USB to connect
 print("Hello, Pi Pico!")
 
-# Setup Green LED on GPIO6 (change if needed)
+# Setup DHT22 sensor on GP15
+sensor = dht.DHT22(Pin(15))
+
+# Setup Green LED on GPIO6
 green_led = Pin(6, Pin.OUT)
 
 while True:
-    # Generate random pressure between 40 and 50 psi
-    pressure = 40 + urandom.getrandbits(4) % 11  # 40–50 inclusive
-    print("Pressure:", pressure, "psi")
+    try:
+        # Measure temperature and humidity
+        sensor.measure()
+        temp = sensor.temperature()
+        hum = sensor.humidity()
+        print("Temperature:", temp, "°C, Humidity:", hum, "%")
 
-    # Conditional statement for green LED
-    if pressure > 45:
-        green_led.value(1)  # Turn Green LED ON
-        print("Green LED ON (Pressure > 45 psi)")
-    else:
-        green_led.value(0)  # Turn Green LED OFF
-        print("Green LED OFF (Pressure <= 45 psi)")
+        # Green LED logic: ON if temperature > 25, OFF otherwise
+        # (You can adjust the threshold if needed)
+        if temp > 25:
+            green_led.value(1)
+            print("Green LED ON (Temp > 25)")
+        else:
+            green_led.value(0)
+            print("Green LED OFF (Temp <= 25)")
+
+    except OSError as e:
+        print("Failed to read sensor.")
 
     sleep(1)  # Wait 1 second before next reading
